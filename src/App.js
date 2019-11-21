@@ -25,14 +25,24 @@ function App() {
   const [charge, setCharge] = useState(" ");
   // single amount
   const [amount, setAmount] = useState(" ");
+  // alert
+
+  const [alert, setAlert] = useState({ show: false });
   // **** functionality ****
+  // handle charge
   const handleCharge = e => {
     setCharge(e.target.value);
   };
+  // handle amount
   const handleAmount = e => {
     setAmount(e.target.value);
   };
 
+  const handleAlert = ({ type, text }) => {
+    setAlert({ show: true, type, text });
+  };
+
+  // handle submit
   const handleSubmit = e => {
     e.preventDefault();
     if (charge !== "" && amount > 0) {
@@ -46,7 +56,8 @@ function App() {
   };
   return (
     <>
-      <Alert></Alert>
+      {alert.show && <Alert type={alert.type} text={alert.text}></Alert>}
+
       <h1>budget calculator</h1>
       <main className="App">
         {" "}
