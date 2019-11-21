@@ -65,9 +65,18 @@ function App() {
     }
   };
 
-  const handleClear = e => {
+  // clear all items
+  const clearList = e => {
     setExpenses([]);
   };
+
+  const handleDelete = id => {};
+
+  const handleEdit = id => {
+    // const singleExpense = { id: uuid(), charge, amount };
+    // setExpenses([...expenses, ]);
+  };
+
   return (
     <>
       {alert.show && <Alert type={alert.type} text={alert.text}></Alert>}
@@ -83,7 +92,9 @@ function App() {
           handleSubmit={handleSubmit}
         ></ExpenseForm>
         <ExpenseList
-          handleClear={handleClear}
+          clearList={clearList}
+          handleEdit={handleEdit}
+          handleDelete={handleDelete}
           expenses={expenses}
         ></ExpenseList>
       </main>
