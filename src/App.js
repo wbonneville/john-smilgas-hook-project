@@ -21,13 +21,16 @@ function App() {
   // **** state values ****
   // all expenses, add expense
   const [expenses, setExpenses] = useState(initialExpenses);
+
   // single expense
   const [charge, setCharge] = useState(" ");
+
   // single amount
   const [amount, setAmount] = useState(" ");
-  // alert
 
+  // alert
   const [alert, setAlert] = useState({ show: false });
+
   // **** functionality ****
   // handle charge
   const handleCharge = e => {
@@ -40,6 +43,9 @@ function App() {
 
   const handleAlert = ({ type, text }) => {
     setAlert({ show: true, type, text });
+    setTimeout(() => {
+      setAlert({ show: false });
+    }, 3000);
   };
 
   // handle submit
@@ -50,9 +56,17 @@ function App() {
       setExpenses([...expenses, singleExpense]);
       setCharge("");
       setAmount("");
+      handleAlert({ type: "success", text: "item added" });
     } else {
-      // add alert
+      handleAlert({
+        type: "danger",
+        text: `charge can't be empty value and amount value has to be bigger than zero`
+      });
     }
+  };
+
+  const handleClear = e => {
+    setExpenses([]);
   };
   return (
     <>
@@ -68,7 +82,10 @@ function App() {
           handleCharge={handleCharge}
           handleSubmit={handleSubmit}
         ></ExpenseForm>
-        <ExpenseList expenses={expenses}></ExpenseList>
+        <ExpenseList
+          handleClear={handleClear}
+          expenses={expenses}
+        ></ExpenseList>
       </main>
       <h1>
         total spending :{" "}
