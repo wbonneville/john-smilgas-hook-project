@@ -2,6 +2,7 @@ import React from "react";
 import Item from "./ExpenseItem";
 import { MdDelete } from "react-icons/md";
 
+// destructuring...
 export const ExpenseList = ({
   expenses,
   clearList,
@@ -10,6 +11,7 @@ export const ExpenseList = ({
 }) => {
   return (
     <>
+      {/* map through the expenses and display each one as an Item */}
       <ul className="list">
         {expenses.map(expense => {
           return (
@@ -22,6 +24,7 @@ export const ExpenseList = ({
           );
         })}
       </ul>
+      {/* if there are any expenses... then render this button */}
       {expenses.length > 0 && (
         <button onClick={clearList} className="btn">
           clear expenses

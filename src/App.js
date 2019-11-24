@@ -33,6 +33,7 @@ function App() {
   const [amount, setAmount] = useState(" ");
 
   // alert
+  // alert is initially set to false (closed)
   const [alert, setAlert] = useState({ show: false });
   // edit
   const [edit, setEdit] = useState(false);
@@ -43,16 +44,21 @@ function App() {
   useEffect(() => {
     localStorage.setItem("expenses", JSON.stringify(expenses));
   }, [expenses]);
-  // **** functionality ****
+
+  // **** FUNCTIONALITY ****
+
   // handle charge
   const handleCharge = e => {
     setCharge(e.target.value);
   };
+
   // handle amount
   const handleAmount = e => {
     setAmount(e.target.value);
   };
 
+  // sets alert to true, thereby opening the alert
+  // the alert closes after 3 seconds
   const handleAlert = ({ type, text }) => {
     setAlert({ show: true, type, text });
     setTimeout(() => {
@@ -62,12 +68,16 @@ function App() {
 
   // handle submit
   const handleSubmit = e => {
+    // prevent refreshing
     e.preventDefault();
+    // if the charge and the amount are not empty and actually contain values...
     if (charge !== "" && amount > 0) {
       if (edit) {
+        // map through the items and return a new array of items minus the selected item
         let tempExpenses = expenses.map(item => {
           return item.id === id ? { ...item, charge, amount } : item;
         });
+        // ...set the expenses
         setExpenses(tempExpenses);
         setEdit(false);
         handleAlert({ type: "success", text: "item edited" });
@@ -88,19 +98,28 @@ function App() {
   };
 
   // clear all items
+  // set expenses array to a new, empty array
   const clearList = e => {
     setExpenses([]);
+    // display the alert
     handleAlert({ type: "danger", text: "all items deleted" });
   };
 
+  // filter through all the items
+  // create a new array and inside it return all of the items but the selected item
   const handleDelete = id => {
+    // if item.id is not equal to the passed (selected/clicked) id, shove it in the new array
     let tempExpenses = expenses.filter(item => item.id !== id);
+    // set the actual state of the expenses = to the contents of the new array
     setExpenses(tempExpenses);
+    // display the alert
     handleAlert({ type: "danger", text: "item deleted" });
   };
 
+  // loop through the items in the array and only return the item that was clicked
   const handleEdit = id => {
     let expense = expenses.find(item => item.id === id);
+    // edit the charge and amount
     let { charge, amount } = expense;
     setCharge(charge);
     setAmount(amount);
@@ -109,6 +128,8 @@ function App() {
   };
 
   return (
+    // conditional rendering
+    // alert only shows if show alert.show is true
     <>
       {alert.show && <Alert type={alert.type} text={alert.text}></Alert>}
 
@@ -116,14 +137,19 @@ function App() {
       <main className="App">
         {" "}
         <ExpenseForm
+          // pass down drops to expense form
+          // charge prop = to the state of charge inside of the hook...
+          // etc...
           charge={charge}
           amount={amount}
           handleAmount={handleAmount}
           handleCharge={handleCharge}
           handleSubmit={handleSubmit}
           edit={edit}
+          //
         ></ExpenseForm>
         <ExpenseList
+          // passing more props
           clearList={clearList}
           handleEdit={handleEdit}
           handleDelete={handleDelete}
@@ -132,6 +158,9 @@ function App() {
       </main>
       <h1>
         total spending :{" "}
+        {/* use reduce to loop through the all of the amounts and add them up */}
+        {/* accumulator is the total */}
+        {/* current is the current item in the iteration */}
         <span className="total">
           ${" "}
           {expenses.reduce((acc, curr) => {
